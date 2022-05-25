@@ -20,7 +20,7 @@
     {
       "key": "apiMessageTemplate",
       "label": "API Message POST Body Template",
-      "description": "The template for the API POST body in JSON format. The template must contain both variables in this example: E.g. {\"to\":%%clientNumber%%,\"message\":%%smsMessage%%,\"saveMessage\":true}",
+      "description": "The template for the API POST body in JSON format. The template must contain both variables in this example: E.g. {\"to\":\"%%clientNumber%%\",\"message\":\"%%smsMessage%%\",\"saveMessage\":true}",
       "required": 1
     },
     {
