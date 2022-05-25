@@ -9,6 +9,9 @@
       ]
     }
   },
+  "config": {
+    "platform-check": false
+  },
   "require": {
     "php-di/php-di": "^5.4",
     "doctrine/cache": "^1.7",
