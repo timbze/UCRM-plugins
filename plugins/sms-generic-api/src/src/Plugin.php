@@ -7,7 +7,7 @@ namespace SmsNotifier;
 
 
 use Psr\Log\LogLevel;
-use SmsNotifier\Facade\TwilioNotifierFacade;
+use SmsNotifier\Facade\ApiNotifierFacade;
 use SmsNotifier\Factory\NotificationDataFactory;
 use SmsNotifier\Service\OptionsManager;
 use SmsNotifier\Service\PluginDataValidator;
@@ -31,7 +31,7 @@ class Plugin
     private $pluginDataValidator;
 
     /**
-     * @var TwilioNotifierFacade
+     * @var ApiNotifierFacade
      */
     private $notifierFacade;
 
@@ -41,10 +41,10 @@ class Plugin
     private $notificationDataFactory;
 
     public function __construct(
-        Logger $logger,
-        OptionsManager $optionsManager,
-        PluginDataValidator $pluginDataValidator,
-        TwilioNotifierFacade $notifierFacade,
+        Logger                  $logger,
+        OptionsManager          $optionsManager,
+        PluginDataValidator     $pluginDataValidator,
+        ApiNotifierFacade       $notifierFacade,
         NotificationDataFactory $notificationDataFactory
     )
     {
@@ -58,11 +58,11 @@ class Plugin
     public function run(): void
     {
         if (PHP_SAPI === 'fpm-fcgi') {
-            $this->logger->info('Twilio SMS over HTTP started');
+            $this->logger->info('Generic API notifier over HTTP started');
             $this->processHttpRequest();
             $this->logger->info('HTTP request processing ended.');
         } elseif (PHP_SAPI === 'cli') {
-            $this->logger->info('Twilio SMS over CLI started');
+            $this->logger->info('Generic API notifier over CLI started');
             $this->processCli();
             $this->logger->info('CLI process ended.');
         } else {

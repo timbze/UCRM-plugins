@@ -31,13 +31,13 @@ class PluginDataValidator
     {
         $pluginData = $this->optionsManager->load();
         $valid = true;
-        if (empty($pluginData->twilioAccountSid)) {
-            $this->errors[] = 'Not valid configuration: Twilio Account SID must be configured';
+        if (empty($pluginData->apiMessageTemplate)) {
+            $this->errors[] = 'Not valid configuration: API message template must be configured';
             $valid = false;
         }
 
-        if (empty($pluginData->twilioAuthToken)) {
-            $this->errors[] = 'Not valid configuration: Twilio Auth Token must be configured';
+        if (empty($pluginData->apiAddress)) {
+            $this->errors[] = 'Not valid configuration: API address must be configured';
             $valid = false;
         }
 

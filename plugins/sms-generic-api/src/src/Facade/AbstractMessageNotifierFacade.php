@@ -8,7 +8,7 @@ use SmsNotifier\Data\NotificationData;
 use SmsNotifier\Factory\MessageTextFactory;
 use SmsNotifier\Service\Logger;
 use SmsNotifier\Service\SmsNumberProvider;
-use Twilio\Exceptions\HttpException;
+use GuzzleHttp\Exception\TransferException;
 
 /*
  * send message to client's number
@@ -38,7 +38,7 @@ abstract class AbstractMessageNotifierFacade
 
     /**
      * implement in subclass with the specific messaging provider
-     * @see TwilioNotifierFacade::sendMessage()
+     * @see ApiNotifierFacade::sendMessage()
      *
      * @param NotificationData $notificationData
      * @param string $clientSmsNumber
@@ -69,8 +69,8 @@ abstract class AbstractMessageNotifierFacade
 
         try {
             $this->sendMessage($notificationData, $clientSmsNumber, $messageBody);
-        } catch (HttpException $httpException) {
-            $this->logger->error($httpException->getCode().' '.$httpException->getMessage());
+        } catch (TransferException $exception) {
+            $this->logger->error($exception->getCode().' '.$exception->getMessage());
         }
     }
 

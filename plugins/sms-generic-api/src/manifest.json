@@ -3,7 +3,7 @@
   "information": {
     "name": "sms-generic-api",
     "displayName": "SMS notifications via Generic API",
-    "description": "This plugin sends SMS notifications via API",
+    "description": "This plugin sends notifications via API. It was originally adapted from Twilio SMS notifier plugin for a different SMS service, but can in theory be used for any API notification service",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-generic-api",
     "version": "0.1",
     "ucrmVersionCompliancy": {
@@ -18,22 +18,22 @@
   },
   "configuration": [
     {
-      "key": "twilioAccountSid",
-      "label": "Twilio Account Sid",
-      "description": "Account SID obtained from twilio.com/console",
+      "key": "apiMessageTemplate",
+      "label": "API Message POST Body Template",
+      "description": "The template for the API POST body in JSON format. The template must contain both variables in this example: E.g. {\"to\":%%clientNumber%%,\"message\":%%smsMessage%%,\"saveMessage\":true}",
       "required": 1
     },
     {
-      "key": "twilioAuthToken",
-      "label": "Twilio Auth Token",
-      "description": "Auth Token obtained from twilio.com/console",
+      "key": "apiAddress",
+      "label": "API Address",
+      "description": "E.g. http://10.0.0.10/sendSms",
       "required": 1
     },
     {
-      "key": "twilioSmsNumber",
-      "label": "Twilio SMS number",
-      "description": "A Twilio phone number you purchased at twilio.com/console",
-      "required": 1
+      "key": "apiAuthCode",
+      "label": "API Authorization Code",
+      "description": "Authorization header value if needed",
+      "required": 0
     },
     {
       "key": "event_client_add",

@@ -13,17 +13,17 @@ class PluginData extends UcrmData
     /**
      * @var string
      */
-    public $twilioAccountSid;
+    public $apiMessageTemplate;
 
     /**
      * @var string
      */
-    public $twilioAuthToken;
+    public $apiAddress;
 
     /**
      * @var string
      */
-    public $twilioSmsNumber;
+    public $apiAuthCode;
 
     /**
      * @var string
