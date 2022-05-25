@@ -13,6 +13,7 @@
     "twilio/sdk": "^5.42",
     "php-di/php-di": "^5.4",
     "doctrine/cache": "^1.13",
-    "katzgrau/klogger": "^1.2"
+    "katzgrau/klogger": "^1.2",
+    "guzzlehttp/guzzle": "^7.4"
   }
 }
