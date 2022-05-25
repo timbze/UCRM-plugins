@@ -68,8 +68,8 @@ class ApiNotifierFacade extends AbstractMessageNotifierFacade {
         $output = $this->pluginData->apiMessageTemplate;
         $cn = '%%clientNumber%%';
         $sm = '%%smsMessage%%';
-        if (strpos($output, $cn) > -1) throw new \UnexpectedValueException("The apiMessageTemplate MUST contain $cn");
-        if (strpos($output, $sm) > -1) throw new \UnexpectedValueException("The apiMessageTemplate MUST contain $sm");
+        if (!(strpos($output, $cn) > -1)) throw new \UnexpectedValueException("The apiMessageTemplate MUST contain $cn");
+        if (!(strpos($output, $sm) > -1)) throw new \UnexpectedValueException("The apiMessageTemplate MUST contain $sm");
 
         $output = str_replace($cn, $clientSmsNumber, $output);
         $output = str_replace($sm, $messageBody, $output);
