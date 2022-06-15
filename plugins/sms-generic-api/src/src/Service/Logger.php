@@ -62,6 +62,7 @@ class Logger extends \Katzgrau\KLogger\Logger
     {
         $logLevelThreshold = $this->validateLevel($logLevelThreshold, self::DEFAULT_LEVEL);
         parent::setLogLevelThreshold($logLevelThreshold);
-        $this->notice('Logging level set to:' . $logLevelThreshold);
+        if ($logLevelThreshold != self::DEFAULT_LEVEL)
+            $this->notice('Logging level set to:' . $logLevelThreshold);
     }
 }

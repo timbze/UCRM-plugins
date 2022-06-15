@@ -113,9 +113,11 @@ class Plugin
 
         try {
             $this->notifierFacade->notify($notification);
+        } catch (\InvalidArgumentException $ex) {
+            $this->logger->debug($ex->getMessage());
         } catch (\Exception $ex) {
             $this->logger->error($ex->getMessage());
-            $this->logger->warning($ex->getTraceAsString());
+            $this->logger->warning('Error stack: ' . $ex->getTraceAsString());
         }
 
     }
