@@ -58,9 +58,9 @@ class Plugin
     public function run(): void
     {
         if (PHP_SAPI === 'fpm-fcgi') {
-            $this->logger->info('Generic API notifier over HTTP started');
+            $this->logger->debug('Generic API notifier over HTTP started');
             $this->processHttpRequest();
-            $this->logger->info('HTTP request processing ended.');
+            $this->logger->debug('HTTP request processing ended.');
         } elseif (PHP_SAPI === 'cli') {
             $this->logger->info('Generic API notifier over CLI started');
             $this->processCli();

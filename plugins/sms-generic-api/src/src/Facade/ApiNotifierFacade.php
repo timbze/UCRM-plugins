@@ -41,7 +41,7 @@ class ApiNotifierFacade extends AbstractMessageNotifierFacade {
         string $messageBody
     ): void
     {
-        $this->logger->debug(sprintf('Sending: %s', $messageBody));
+        $this->logger->info(sprintf('Sending- To:%s- Msg:%s', $clientSmsNumber, $messageBody));
 
         $apiClient = new Client();
         $headers = ['Content-Type' => 'application/json'];
