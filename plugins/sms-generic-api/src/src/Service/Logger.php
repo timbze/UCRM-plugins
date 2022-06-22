@@ -9,6 +9,10 @@ use Psr\Log\LogLevel;
 
 class Logger extends \Katzgrau\KLogger\Logger
 {
+    const logFileDirectory = "data";
+    const logFileName = "plugin";
+    const logFileExtension = "log";
+
     private const DEFAULT_LEVEL = LogLevel::INFO; // now configurable in manifest
     private const AVAILABLE_LEVELS = [
      LogLevel::EMERGENCY,
@@ -24,11 +28,11 @@ class Logger extends \Katzgrau\KLogger\Logger
     public function __construct($level = null)
     {
         parent::__construct(
-            'data',
+            self::logFileDirectory,
             self::DEFAULT_LEVEL,
             [
-                'extension' => 'log',
-                'filename' => 'plugin',
+                'extension' => self::logFileExtension,
+                'filename' => self::logFileName,
             ]
         );
         if ($level) {
