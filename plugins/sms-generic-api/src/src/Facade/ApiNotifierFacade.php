@@ -53,14 +53,24 @@ class ApiNotifierFacade extends AbstractMessageNotifierFacade {
             $this->createPostBody($messageBody, $clientSmsNumber)
         );
 
-        try {
-            $apiClient->send($request);
-            $this->logger->debug("SMS to $clientSmsNumber was sent");
-        } catch (GuzzleException $e) {
-            $code = $e->getCode();
-            $msg = $e->getMessage();
-            $this->logger->warning("API error code: $code, Msg: $msg");
-            throw $e;
+        $tries = 1;
+        $numToTry = 3;
+        while (true) {
+            try {
+                $apiClient->send($request);
+                $this->logger->debug("SMS to $clientSmsNumber was sent");
+                break;
+            } catch (GuzzleException $e) {
+                $code = $e->getCode();
+                $msg = $e->getMessage();
+                $this->logger->warning("API error code: $code, Msg: $msg");
+                if ($tries >= $numToTry)
+                    throw $e;
+                else
+                    $this->logger->info("Retry #$tries");
+
+                $tries++;
+            }
         }
     }
 
