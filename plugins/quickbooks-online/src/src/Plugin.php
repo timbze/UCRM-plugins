@@ -115,7 +115,7 @@ class Plugin
     /**
      * Idea from [here](https://stackoverflow.com/a/45090213), but modified
      */
-    function trimLogToLength($path, $numRowsToKeep) {
+    private function trimLogToLength($path, $numRowsToKeep) {
         $file = file($path);
         if (!$file) return;
 
