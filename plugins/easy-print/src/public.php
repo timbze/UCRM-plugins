@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Service\CsvGenerator;
 use App\Service\TemplateRenderer;
 use Ubnt\UcrmPluginSdk\Security\PermissionNames;
 use Ubnt\UcrmPluginSdk\Service\UcrmApi;
@@ -41,21 +40,8 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
     }
 
-    $countries = $api->get('countries');
-    $states = array_merge(
-        // Canada
-        $api->get('countries/states?countryId=54'),
-        // USA
-        $api->get('countries/states?countryId=249')
-    );
-
-//    $csvGenerator = new CsvGenerator($countries, $states);
-
     $invoices = $api->get('invoices', $parameters);
 
-//    $csvGenerator->generate('ucrm-invoices.csv', $invoices);
-
-    exit;
 }
 
 // Render form.
