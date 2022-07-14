@@ -28,6 +28,8 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         'organizationId' => $_GET['organization'],
         'createdDateFrom' => $_GET['since'],
         'createdDateTo' => $_GET['until'],
+        'order' => 'createdDate',
+        'direction' => 'DESC',
     ];
 
     // make sure the dates are in YYYY-MM-DD format
@@ -41,7 +43,45 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
     }
 
     $invoices = $api->get('invoices', $parameters);
+    $payments = $api->get('payments', $parameters);
+    $documents = [];
+    foreach ($invoices as $invoice){
+        $documents[] = [
+            'createdDate' => $invoice['createdDate'],
+            'number' => $invoice['number'],
+            'clientCompanyName' => $invoice['clientCompanyName'],
+            'clientFirstName' => $invoice['clientFirstName'],
+            'clientLastName' => $invoice['clientLastName'],
+            'total' => $invoice['total'],
+            'type' => "invoice",
+        ];
+    }
 
+    foreach ($payments as $payment){
+        $documents[] = [
+            'createdDate' => $payment['createdDate'],
+            'number' => $payment['id'],
+            'clientCompanyName' => "",// $payment['clientCompanyName'],
+            'clientFirstName' => "",//$payment['clientFirstName'],
+            'clientLastName' => "",//$payment['clientLastName'],
+            'total' => $payment['amount'],
+            'type' => "payment",
+        ];
+    }
+
+//    krsort($documents);
+
+} else {
+    // first load
+    $parameters = [
+        'organizationId' => 1, // first company
+        'createdDateFrom' => date('Y-m-d'), // today
+        'createdDateTo' => date('Y-m-d'), // today
+        'order' => 'createdDate',
+        'direction' => 'DESC',
+    ];
+
+    $documents = $api->get('invoices', $parameters);
 }
 
 // Render form.
@@ -55,6 +95,6 @@ $renderer->render(
     [
         'organizations' => $organizations,
         'ucrmPublicUrl' => $optionsManager->loadOptions()->ucrmPublicUrl,
-        'invoices' => $invoices ?? []
+        'documents' => $documents ?? []
     ]
 );
