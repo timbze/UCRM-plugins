@@ -1,19 +1,16 @@
-# Invoice CSV export
+# Easy Print
 
-Configurable export of invoices into CSV. Using this plugin, user can define From and To date filters and export the given invoices into a CSV file, this can be used for a manual export to 3rd party accounting tools.
+**This plugin loads invoice and payment records by descending date order and allows
+1-click print of the pdf file. It solves that issue without having to download the PDF file
+first, but getting it printed. The HTML version of receipt is ugly quality.**
 
-Also, this plugin can be used as an example to show some of the possibilities of what you can do with UCRM plugins. It can be used by developers as a template for creating a new plugin.
 
-Read more about creating your own plugin in the [Developer documentation](../../master/docs/index.md).
-
+# Comments from before
 ## Useful classes
 
 ### `App\Service\TemplateRenderer`
 
 Very simple class to load a PHP template. When writing a PHP template be careful to use correct escaping function: `echo htmlspecialchars($string, ENT_QUOTES);`.
-
-### UCRM Plugin SDK
-The [UCRM Plugin SDK](https://github.com/Ubiquiti-App/UCRM-Plugin-SDK) is used by this plugin. It contains classes able to help you with calling UCRM API, getting plugin's configuration and much more.
 
 ## Extending the plugin
 
