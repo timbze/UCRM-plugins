@@ -1,0 +1,27 @@
+{
+  "version": "1",
+  "information": {
+    "name": "easy-print",
+    "displayName": "Easy Print",
+    "description": "Print invoices or payments in PDF version without downloading file to desktop.",
+    "url": "https://github.com/Ubiquiti-App/UCRM-plugins",
+    "version": "0.1",
+    "ucrmVersionCompliancy": {
+      "min": "2.14.0-beta4",
+      "max": null
+    },
+    "unmsVersionCompliancy": {
+      "min": "1.0.0-dev.1",
+      "max": null
+    },
+    "author": "Ubiquiti Networks, Inc."
+  },
+  "menu": [
+    {
+      "key": "Reports",
+      "label": "Easy Print",
+      "type": "admin",
+      "target": "iframe"
+    }
+  ]
+}
