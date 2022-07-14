@@ -11,9 +11,12 @@
   },
   "require": {
     "league/csv": "^9.1",
-    "ubnt/ucrm-plugin-sdk": "~0.8.2"
+    "ubnt/ucrm-plugin-sdk": "~0.8"
   },
   "config": {
-    "platform-check": false
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.3"
+    }
   }
 }
