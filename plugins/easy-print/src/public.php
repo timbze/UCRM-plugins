@@ -22,33 +22,25 @@ if (! $user || $user->isClient || ! $user->hasViewPermission(PermissionNames::BI
     \App\Http::forbidden();
 }
 
-// Process submitted form.
-if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
-    $parameters = [
-        'organizationId' => $_GET['organization'],
-        'createdDateFrom' => $_GET['since'],
-        'createdDateTo' => $_GET['until'],
-        'order' => 'createdDate',
-        'direction' => 'DESC',
-    ];
-
+function getDocuments(array $params, UcrmApi $api): array
+{
     // make sure the dates are in YYYY-MM-DD format
-    if ($parameters['createdDateFrom']) {
-        $parameters['createdDateFrom'] = new \DateTimeImmutable($parameters['createdDateFrom']);
-        $parameters['createdDateFrom'] = $parameters['createdDateFrom']->format('Y-m-d');
+    if ($params['createdDateFrom']) {
+        $params['createdDateFrom'] = new \DateTimeImmutable($params['createdDateFrom']);
+        $params['createdDateFrom'] = $params['createdDateFrom']->format('Y-m-d');
     }
-    if ($parameters['createdDateTo']) {
-        $parameters['createdDateTo'] = new \DateTimeImmutable($parameters['createdDateTo']);
-        $parameters['createdDateTo'] = $parameters['createdDateTo']->format('Y-m-d');
+    if ($params['createdDateTo']) {
+        $params['createdDateTo'] = new \DateTimeImmutable($params['createdDateTo']);
+        $params['createdDateTo'] = $params['createdDateTo']->format('Y-m-d');
     }
 
-    $invoices = $api->get('invoices', $parameters);
-    $payments = $api->get('payments', $parameters);
+    $invoices = $api->get('invoices', $params);
+    $payments = $api->get('payments', $params);
     $documents = [];
     foreach ($invoices as $invoice){
         $documents[] = [
             'createdDate' => $invoice['createdDate'],
-            'number' => $invoice['number'],
+            'number' => $invoice['id'],
             'clientCompanyName' => $invoice['clientCompanyName'],
             'clientFirstName' => $invoice['clientFirstName'],
             'clientLastName' => $invoice['clientLastName'],
@@ -57,31 +49,44 @@ if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) 
         ];
     }
 
-    foreach ($payments as $payment){
+    foreach ($payments as $payment) {
+        $client = $api->get('clients/'.$payment['clientId']);
         $documents[] = [
             'createdDate' => $payment['createdDate'],
             'number' => $payment['id'],
-            'clientCompanyName' => "",// $payment['clientCompanyName'],
-            'clientFirstName' => "",//$payment['clientFirstName'],
-            'clientLastName' => "",//$payment['clientLastName'],
+            'clientCompanyName' => $client['companyName'],
+            'clientFirstName' => $client['firstName'],
+            'clientLastName' => $client['lastName'],
             'total' => $payment['amount'],
             'type' => "payment",
         ];
     }
 
-//    krsort($documents);
+    usort($documents, function ($item1, $item2) {
+        return $item2['createdDate'] <=> $item1['createdDate'];
+    });
 
+    return $documents;
+}
+
+// Process submitted form.
+if (array_key_exists('organization', $_GET) && array_key_exists('since', $_GET) && array_key_exists('until', $_GET)) {
+    $parameters = [
+        'organizationId' => $_GET['organization'],
+        'createdDateFrom' => $_GET['since'],
+        'createdDateTo' => $_GET['until'],
+    ];
+
+    $documents = getDocuments($parameters, $api);
 } else {
     // first load
     $parameters = [
         'organizationId' => 1, // first company
         'createdDateFrom' => date('Y-m-d'), // today
         'createdDateTo' => date('Y-m-d'), // today
-        'order' => 'createdDate',
-        'direction' => 'DESC',
     ];
 
-    $documents = $api->get('invoices', $parameters);
+    $documents = getDocuments($parameters, $api);
 }
 
 // Render form.

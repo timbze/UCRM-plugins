@@ -14,7 +14,7 @@
             <?php foreach ($documents as $doc) { ?>
                 <tr>
                     <td><?php echo date_format(date_create($doc['createdDate']), "Y-m-d h:i:s A"); ?></td>
-                    <td><?php echo $doc['number']; ?></td>
+                    <td><?php if ($doc['type'] == 'payment') echo 'Pmt: '; else echo 'Inv: '; echo $doc['number']; ?></td>
                     <td><?php echo $doc['clientCompanyName'] . $doc['clientFirstName'] . ' ' . $doc['clientLastName']; ?></td>
                     <td><?php echo '$' . number_format($doc['total'], 2); ?></td>
                     <?php if ($doc['type'] == 'payment') { ?>
