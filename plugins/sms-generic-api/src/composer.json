@@ -13,9 +13,8 @@
     "platform-check": false
   },
   "require": {
-    "php-di/php-di": "^5.4",
-    "doctrine/cache": "^1.7",
+    "php-di/php-di": "^7.0",
     "katzgrau/klogger": "^1.2",
-    "guzzlehttp/guzzle": "^6.5.6"
+    "guzzlehttp/guzzle": "^7.8"
   }
 }

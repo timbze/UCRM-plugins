@@ -5,7 +5,7 @@
     "displayName": "SMS notifications via Generic API",
     "description": "This plugin sends notifications via API. It was originally adapted from Twilio SMS notifier plugin for a different SMS service, but can in theory be used for any API notification service",
     "url": "https://github.com/Ubiquiti-App/UCRM-plugins/tree/master/plugins/sms-generic-api",
-    "version": "1.0",
+    "version": "1.1",
     "ucrmVersionCompliancy": {
       "min": "2.14.0-beta",
       "max": null
