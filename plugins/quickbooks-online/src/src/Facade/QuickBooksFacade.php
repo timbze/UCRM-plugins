@@ -59,6 +59,7 @@ class QuickBooksFacade
 
     private $itemCache = [];
     private $depositToCache = [];
+    private $taxIdCache = -1;
 
     /**
      * @var int
@@ -312,22 +313,25 @@ class QuickBooksFacade
                 $this->logger->info(sprintf('Invoice::create DocNumber=%s DueDate=%s Total=%s',
                     sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']), $ucrmInvoice['dueDate'], $ucrmInvoice['total']));
 
+                $taxId = $this->getTaxId($dataService, $pluginData);
+                $inv = [
+                    'DocNumber' => sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']),
+                    'DueDate' => $ucrmInvoice['dueDate'],
+                    'TxnDate' => $ucrmInvoice['createdDate'],
+                    'Line' => $lines,
+                    'TxnTaxDetail' => [
+                        'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
+                    ],
+                    'CustomerRef' => [
+                        'value' => $qbClient->Id,
+                    ],
+                ];
+
+                if ($taxId)
+                    $inv['TxnTaxDetail']['TxnTaxCodeRef'] = ['value' => $taxId];
+
                 $response = $this->dataServiceAdd($dataService,
-                    Invoice::create(
-                        [
-                            'DocNumber' => sprintf('%s/%s', $ucrmInvoice['number'], $ucrmInvoice['id']),
-                            'DueDate' => $ucrmInvoice['dueDate'],
-                            'TxnDate' => $ucrmInvoice['createdDate'],
-                            'Line' => $lines,
-                            'TxnTaxDetail' => [
-                                'TotalTax' => $ucrmInvoice['taxes']['totalValue'],
-                                'TxnTaxCodeRef' => 'TAX',
-                            ],
-                            'CustomerRef' => [
-                                'value' => $qbClient->Id,
-                            ],
-                        ]
-                    )
+                    Invoice::create($inv)
                 );
 
                 if ($response instanceof IPPIntuitEntity) {
@@ -536,21 +540,25 @@ class QuickBooksFacade
                 $docNumber, $ucrmCredit['dueDate'], $ucrmCredit['total']));
 
             try {
+                $taxId = $this->getTaxId($dataService, $pluginData);
+                $inv = [
+                    'DocNumber' => $docNumber,
+                    'TxnDate' => $ucrmCredit['createdDate'],
+                    'Line' => $lines,
+                    'TxnTaxDetail' => [
+                        'TotalTax' => 0-$ucrmCredit['taxes']['totalValue'],
+                    ],
+                    'CustomerRef' => [
+                        'value' => $qbClient->Id,
+                    ],
+                ];
+
+
+                if ($taxId)
+                    $inv[TxnTaxDetail][TxnTaxCodeRef] = ['value' => $taxId];
+
                 $response = $this->dataServiceAdd($dataService,
-                    CreditMemo::create(
-                        [
-                            'DocNumber' => $docNumber,
-                            'TxnDate' => $ucrmCredit['createdDate'],
-                            'Line' => $lines,
-                            'TxnTaxDetail' => [
-                                'TotalTax' => 0-$ucrmCredit['taxes']['totalValue'],
-                                'TxnTaxCodeRef' => 'TAX',
-                            ],
-                            'CustomerRef' => [
-                                'value' => $qbClient->Id,
-                            ],
-                        ]
-                    )
+                    CreditMemo::create($inv)
                 );
 
                 if ($response instanceof IPPIntuitEntity) {
@@ -996,6 +1004,28 @@ class QuickBooksFacade
 
             break;
         }
+
+        return null;
+    }
+
+    private function getTaxId(DataService $dataService, PluginData $pluginData): ?int
+    {
+        if ($this->taxIdCache > -1)
+            return $this->taxIdCache;
+
+        $taxName = $pluginData->taxName;
+        if (!$taxName) return null;
+        $this->logger->debug("Checking tax id for: '$taxName'");
+
+        $taxCode = $this->dataServiceQuery($dataService, "SELECT Id FROM TaxCode WHERE Name = '$taxName'");
+        if ($taxCode != null && count($taxCode) > 0) {
+            $id = $taxCode[0]->Id;
+            $this->logger->debug("Found tax id $id for '$taxName'");
+            $this->taxIdCache = intval($id);
+            return $this->taxIdCache;
+        }
+
+        $this->logger->warning("Tax id not found for name '$taxName'");
 
         return null;
     }

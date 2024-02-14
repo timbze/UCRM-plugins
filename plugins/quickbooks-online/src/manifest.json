@@ -79,6 +79,12 @@
       "required": 0
     },
     {
+      "key": "taxName",
+      "label": "Tax name to use if tax is enabled",
+      "description": "Enter this if you use tax and want it sent to QB Online",
+      "required": 0
+    },
+    {
       "key": "logLevel",
       "label": "Logging Level",
       "description": "Leave empty for default (i.e. regular logging level). To get more details in log, enter \"debug\" (without the double quotes)",

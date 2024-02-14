@@ -126,5 +126,10 @@ class PluginData extends UcrmData
     /**
      * @var string|null
      */
+    public $taxName;
+
+    /**
+     * @var string|null
+     */
     public $logLevel;
 }
